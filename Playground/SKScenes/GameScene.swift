@@ -13,15 +13,21 @@ class GameScene: SKScene {
     
     private var spinnyNode : SKShapeNode?
     
+    var car: Vehicle = Vehicle()
     
     var steeringWheel: SteeringWheel = SteeringWheel()
-    var car: Vehicle = Vehicle()
     var steeringIndicator: SKSpriteNode = SKSpriteNode()
     var steeringAngleLabel: SKLabelNode = SKLabelNode()
     
+    var cam: SKCameraNode = SKCameraNode()
     
     override func didMove(to view: SKView) {
-
+        
+        // Camera Setup
+        cam = SKCameraNode()
+        self.camera = cam
+        self.addChild(cam)
+        
         // Create shape node to use during mouse interaction
         let w = (self.size.width + self.size.height) * 0.05
         self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
@@ -36,7 +42,7 @@ class GameScene: SKScene {
         steeringWheel = SteeringWheel()
         steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0)))
         steeringWheel.setScale(1.5)
-        self.addChild(steeringWheel)
+        self.camera?.addChild(steeringWheel)
         
         if let vehicle = self.childNode(withName: "Car") as? Vehicle {
             car = vehicle
@@ -105,7 +111,8 @@ class GameScene: SKScene {
             car.update(currentTime)
         }
         
-        
+
+        cam.position = car.position
         // the last time interval that the frame updated
         //lastTime = currentTime
     }

@@ -11,19 +11,19 @@ import SpriteKit
 
 class Vehicle: SKSpriteNode {
     
-    var velocity: Double = 0.00
+    var velocity: Double = 10.00
     
     private var tireAngle: Double = 0.0
     
-    var frontDirection: Double {
+    var frontDirection: CGFloat {
         get {
-            return Double(self.zPosition.radiansToDegrees() + 90 )
+            return (self.zRotation + CGFloat.pi / 2)
         }
     }
     
-    var rearDirection: Double {
+    var rearDirection: CGFloat {
         get {
-            return Double(self.zPosition.radiansToDegrees() - 90 )
+            return (self.zRotation - CGFloat.pi / 2)
         }
     }
     
@@ -37,6 +37,9 @@ class Vehicle: SKSpriteNode {
     
     func update(_ currentTime: TimeInterval){
         self.zRotation += CGFloat(tireAngle).degreesToRadians()
-        
+        let posX = cos(frontDirection) * CGFloat(velocity)
+        let posY = sin(frontDirection) * CGFloat(velocity)
+        let direction = CGVector(dx: posX, dy: posY)
+        self.run(SKAction.move(by: direction, duration: 0.5))
     }
 }
