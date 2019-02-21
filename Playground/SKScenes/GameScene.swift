@@ -15,6 +15,7 @@ class GameScene: SKScene {
     
     
     var steeringWheel: SteeringWheel = SteeringWheel()
+    var car: Vehicle = Vehicle()
     var steeringIndicator: SKSpriteNode = SKSpriteNode()
     var steeringAngleLabel: SKLabelNode = SKLabelNode()
     
@@ -36,6 +37,10 @@ class GameScene: SKScene {
         steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0)))
         steeringWheel.setScale(1.5)
         self.addChild(steeringWheel)
+        
+        if let vehicle = self.childNode(withName: "Car") as? Vehicle {
+            car = vehicle
+        }
         
         if let indicator = self.childNode(withName: "SteeringIndicator") as? SKSpriteNode{
             steeringIndicator = indicator
@@ -95,6 +100,9 @@ class GameScene: SKScene {
             steeringWheel.update(currentTime)
             moveSteeringIndicator(to: steeringAngle)
             steeringAngleLabel.text = String(steeringAngle.rounded())
+            
+            car.turn(by: steeringAngle)
+            car.update(currentTime)
         }
         
         

@@ -20,6 +20,7 @@
 		21F9562A221E570500E784C6 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F95629221E570500E784C6 /* CGFloat+Extensions.swift */; };
 		21F9562F221E59B100E784C6 /* SteeringWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F9562E221E59B100E784C6 /* SteeringWheel.swift */; };
 		21F95632221E5F3100E784C6 /* Game.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21F95631221E5F3100E784C6 /* Game.xcassets */; };
+		21F95636221E8ACF00E784C6 /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F95635221E8ACF00E784C6 /* Vehicle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		21F95629221E570500E784C6 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		21F9562E221E59B100E784C6 /* SteeringWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteeringWheel.swift; sourceTree = "<group>"; };
 		21F95631221E5F3100E784C6 /* Game.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Game.xcassets; sourceTree = "<group>"; };
+		21F95635221E8ACF00E784C6 /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				21F9562E221E59B100E784C6 /* SteeringWheel.swift */,
+				21F95635221E8ACF00E784C6 /* Vehicle.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21F95636221E8ACF00E784C6 /* Vehicle.swift in Sources */,
 				21A8809E221A973D00CFD400 /* GameScene.swift in Sources */,
 				21A880A0221A973D00CFD400 /* GameViewController.swift in Sources */,
 				21F9562A221E570500E784C6 /* CGFloat+Extensions.swift in Sources */,
