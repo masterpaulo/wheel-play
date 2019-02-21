@@ -17,6 +17,9 @@
 		21A880A8221A973F00CFD400 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21A880A6221A973F00CFD400 /* LaunchScreen.storyboard */; };
 		21A880B3221A973F00CFD400 /* PlaygroundTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A880B2221A973F00CFD400 /* PlaygroundTests.swift */; };
 		21A880BE221A973F00CFD400 /* PlaygroundUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A880BD221A973F00CFD400 /* PlaygroundUITests.swift */; };
+		21F9562A221E570500E784C6 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F95629221E570500E784C6 /* CGFloat+Extensions.swift */; };
+		21F9562F221E59B100E784C6 /* SteeringWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F9562E221E59B100E784C6 /* SteeringWheel.swift */; };
+		21F95632221E5F3100E784C6 /* Game.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21F95631221E5F3100E784C6 /* Game.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,9 @@
 		21A880B9221A973F00CFD400 /* PlaygroundUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaygroundUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A880BD221A973F00CFD400 /* PlaygroundUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundUITests.swift; sourceTree = "<group>"; };
 		21A880BF221A973F00CFD400 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21F95629221E570500E784C6 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
+		21F9562E221E59B100E784C6 /* SteeringWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteeringWheel.swift; sourceTree = "<group>"; };
+		21F95631221E5F3100E784C6 /* Game.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Game.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,15 +109,13 @@
 		21A88096221A973D00CFD400 /* Playground */ = {
 			isa = PBXGroup;
 			children = (
-				21A88097221A973D00CFD400 /* AppDelegate.swift */,
-				21A88099221A973D00CFD400 /* GameScene.sks */,
-				21A8809B221A973D00CFD400 /* Actions.sks */,
-				21A8809D221A973D00CFD400 /* GameScene.swift */,
+				21F95630221E5F1A00E784C6 /* Resources */,
+				21F9562D221E592800E784C6 /* Objects */,
+				21F9562C221E58FB00E784C6 /* SKActions */,
+				21F95628221E569D00E784C6 /* SKScenes */,
+				21F95625221E551C00E784C6 /* Utils */,
 				21A8809F221A973D00CFD400 /* GameViewController.swift */,
-				21A880A1221A973D00CFD400 /* Main.storyboard */,
-				21A880A4221A973F00CFD400 /* Assets.xcassets */,
-				21A880A6221A973F00CFD400 /* LaunchScreen.storyboard */,
-				21A880A9221A973F00CFD400 /* Info.plist */,
+				21F9562B221E573D00E784C6 /* Supporting Files */,
 			);
 			path = Playground;
 			sourceTree = "<group>";
@@ -132,6 +136,59 @@
 				21A880BF221A973F00CFD400 /* Info.plist */,
 			);
 			path = PlaygroundUITests;
+			sourceTree = "<group>";
+		};
+		21F95625221E551C00E784C6 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				21F95629221E570500E784C6 /* CGFloat+Extensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		21F95628221E569D00E784C6 /* SKScenes */ = {
+			isa = PBXGroup;
+			children = (
+				21A8809D221A973D00CFD400 /* GameScene.swift */,
+				21A88099221A973D00CFD400 /* GameScene.sks */,
+			);
+			path = SKScenes;
+			sourceTree = "<group>";
+		};
+		21F9562B221E573D00E784C6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				21A88097221A973D00CFD400 /* AppDelegate.swift */,
+				21A880A1221A973D00CFD400 /* Main.storyboard */,
+				21A880A4221A973F00CFD400 /* Assets.xcassets */,
+				21A880A6221A973F00CFD400 /* LaunchScreen.storyboard */,
+				21A880A9221A973F00CFD400 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		21F9562C221E58FB00E784C6 /* SKActions */ = {
+			isa = PBXGroup;
+			children = (
+				21A8809B221A973D00CFD400 /* Actions.sks */,
+			);
+			path = SKActions;
+			sourceTree = "<group>";
+		};
+		21F9562D221E592800E784C6 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				21F9562E221E59B100E784C6 /* SteeringWheel.swift */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
+		21F95630221E5F1A00E784C6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				21F95631221E5F3100E784C6 /* Game.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,6 +300,7 @@
 				21A880A5221A973F00CFD400 /* Assets.xcassets in Resources */,
 				21A880A8221A973F00CFD400 /* LaunchScreen.storyboard in Resources */,
 				21A8809C221A973D00CFD400 /* Actions.sks in Resources */,
+				21F95632221E5F3100E784C6 /* Game.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +327,9 @@
 			files = (
 				21A8809E221A973D00CFD400 /* GameScene.swift in Sources */,
 				21A880A0221A973D00CFD400 /* GameViewController.swift in Sources */,
+				21F9562A221E570500E784C6 /* CGFloat+Extensions.swift in Sources */,
 				21A88098221A973D00CFD400 /* AppDelegate.swift in Sources */,
+				21F9562F221E59B100E784C6 /* SteeringWheel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,7 +506,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A38A2SP759;
-				INFOPLIST_FILE = Playground/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Playground/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -465,7 +525,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A38A2SP759;
-				INFOPLIST_FILE = Playground/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Playground/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
