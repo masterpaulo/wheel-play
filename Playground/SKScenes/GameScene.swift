@@ -38,10 +38,11 @@ class GameScene: SKScene {
             spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),SKAction.fadeOut(withDuration: 0.5),SKAction.removeFromParent()]))
         }
         
-        let h = UIScreen.main.bounds.height
+        let h = view.frame.height
         steeringWheel = SteeringWheel()
-        steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0)))
-        steeringWheel.setScale(1.5)
+        steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0.2)))
+        steeringWheel.zPosition = 10
+        steeringWheel.setScale(1)
         self.camera?.addChild(steeringWheel)
         
         if let vehicle = self.childNode(withName: "Car") as? Vehicle {
@@ -78,6 +79,18 @@ class GameScene: SKScene {
         }
     }
     
+    func adjustCamera(to node: SKNode){
+        let delay = 0.5
+        let position = node.position
+        let rotation = car.zRotation
+        
+        let move = SKAction.move(to: position, duration: delay)
+        let rotate = SKAction.rotate(toAngle: rotation, duration: delay)
+        
+        let adjust = SKAction.group([move])
+        cam.run(adjust)
+    }
+    
    
     // MARK: Overrides
     
@@ -111,8 +124,8 @@ class GameScene: SKScene {
             car.update(currentTime)
         }
         
-
-        cam.position = car.position
+        adjustCamera(to: car)
+        
         // the last time interval that the frame updated
         //lastTime = currentTime
     }
