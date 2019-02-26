@@ -37,7 +37,7 @@ class SteeringWheel: SKSpriteNode {
     
     init() {
         // super.init(imageNamed: String) You can't do this because you are not calling a designated initializer.
-        let texture = SKTexture(imageNamed: "steering_wheel")
+        let texture = SKTexture(imageNamed: "ui_wheel_hd")
         super.init(texture: texture, color: UIColor.clear, size: texture.size())
         self.name = "SteeringWheel"
     }

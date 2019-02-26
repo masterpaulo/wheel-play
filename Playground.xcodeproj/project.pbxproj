@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21719D1F221FE34F00070775 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21719D1E221FE34F00070775 /* MainMenuScene.sks */; };
+		21719D21221FE37700070775 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21719D20221FE37700070775 /* MainMenuScene.swift */; };
+		21719D23221FFDB800070775 /* SteeringIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21719D22221FFDB800070775 /* SteeringIndicator.swift */; };
 		21A88098221A973D00CFD400 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A88097221A973D00CFD400 /* AppDelegate.swift */; };
 		21A8809A221A973D00CFD400 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21A88099221A973D00CFD400 /* GameScene.sks */; };
 		21A8809C221A973D00CFD400 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21A8809B221A973D00CFD400 /* Actions.sks */; };
@@ -41,6 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		21719D1E221FE34F00070775 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
+		21719D20221FE37700070775 /* MainMenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		21719D22221FFDB800070775 /* SteeringIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteeringIndicator.swift; sourceTree = "<group>"; };
 		21A88094221A973D00CFD400 /* Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A88097221A973D00CFD400 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21A88099221A973D00CFD400 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -153,6 +159,8 @@
 			children = (
 				21A8809D221A973D00CFD400 /* GameScene.swift */,
 				21A88099221A973D00CFD400 /* GameScene.sks */,
+				21719D20221FE37700070775 /* MainMenuScene.swift */,
+				21719D1E221FE34F00070775 /* MainMenuScene.sks */,
 			);
 			path = SKScenes;
 			sourceTree = "<group>";
@@ -182,6 +190,7 @@
 			children = (
 				21F9562E221E59B100E784C6 /* SteeringWheel.swift */,
 				21F95635221E8ACF00E784C6 /* Vehicle.swift */,
+				21719D22221FFDB800070775 /* SteeringIndicator.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -299,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21A880A3221A973D00CFD400 /* Main.storyboard in Resources */,
+				21719D1F221FE34F00070775 /* MainMenuScene.sks in Resources */,
 				21A8809A221A973D00CFD400 /* GameScene.sks in Resources */,
 				21A880A5221A973F00CFD400 /* Assets.xcassets in Resources */,
 				21A880A8221A973F00CFD400 /* LaunchScreen.storyboard in Resources */,
@@ -328,11 +338,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21719D23221FFDB800070775 /* SteeringIndicator.swift in Sources */,
 				21F95636221E8ACF00E784C6 /* Vehicle.swift in Sources */,
 				21A8809E221A973D00CFD400 /* GameScene.swift in Sources */,
 				21A880A0221A973D00CFD400 /* GameViewController.swift in Sources */,
 				21F9562A221E570500E784C6 /* CGFloat+Extensions.swift in Sources */,
 				21A88098221A973D00CFD400 /* AppDelegate.swift in Sources */,
+				21719D21221FE37700070775 /* MainMenuScene.swift in Sources */,
 				21F9562F221E59B100E784C6 /* SteeringWheel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -16,7 +16,7 @@ class GameScene: SKScene {
     var car: Vehicle = Vehicle()
     
     var steeringWheel: SteeringWheel = SteeringWheel()
-    var steeringIndicator: SKSpriteNode = SKSpriteNode()
+    var steeringIndicator: SteeringIndicator = SteeringIndicator()
     var steeringAngleLabel: SKLabelNode = SKLabelNode()
     
     var cam: SKCameraNode = SKCameraNode()
@@ -29,32 +29,35 @@ class GameScene: SKScene {
         self.addChild(cam)
         
         // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),SKAction.fadeOut(withDuration: 0.5),SKAction.removeFromParent()]))
-        }
         
-        let h = view.frame.height
+        let h = self.frame.height
         steeringWheel = SteeringWheel()
         steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0.2)))
         steeringWheel.zPosition = 10
-        steeringWheel.setScale(1)
+        steeringWheel.setScale(1.5)
         self.camera?.addChild(steeringWheel)
+        
+        steeringIndicator = SteeringIndicator()
+        steeringIndicator.position = CGPoint(x: 0, y: (-h/2 + (h * 0.0)))
+        steeringIndicator.zPosition = 10
+        steeringIndicator.setScale(1)
+        self.camera?.addChild(steeringIndicator)
         
         if let vehicle = self.childNode(withName: "Car") as? Vehicle {
             car = vehicle
         }
         
-        if let indicator = self.childNode(withName: "SteeringIndicator") as? SKSpriteNode{
-            steeringIndicator = indicator
-        }
-        
         if let label = self.childNode(withName: "SteeringAngleLabel") as? SKLabelNode{
             steeringAngleLabel = label
+        }
+        
+        if let road = self.childNode(withName: "OuterMap") as? SKSpriteNode{
+            let texture = road.texture!
+            road.physicsBody = SKPhysicsBody(texture: texture, size: road.size)
+            road.physicsBody?.affectedByGravity = false
+            road.physicsBody?.allowsRotation = false
+            road.physicsBody?.isDynamic = false
         }
     }
     
@@ -117,7 +120,7 @@ class GameScene: SKScene {
             let steeringAngle = steeringWheel.steeringAngle
             
             steeringWheel.update(currentTime)
-            moveSteeringIndicator(to: steeringAngle)
+            steeringIndicator.set(value: steeringAngle)
             steeringAngleLabel.text = String(steeringAngle.rounded())
             
             car.turn(by: steeringAngle)
@@ -130,10 +133,5 @@ class GameScene: SKScene {
         //lastTime = currentTime
     }
     
-    func moveSteeringIndicator(to steeringAngle:Double){
-        let limit = steeringWheel.steeringAngleLimit
-        let pos = CGFloat( ( steeringAngle / limit) * -300)
-        let move = SKAction.moveTo(x: pos, duration: 0)
-        steeringIndicator.run(move)
-    }
+    
 }
