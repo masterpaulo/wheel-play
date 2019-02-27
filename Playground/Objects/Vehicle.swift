@@ -94,7 +94,7 @@ class Vehicle: SKSpriteNode {
         
         physicsBody = SKPhysicsBody(texture: self.texture!, size: size)
         physicsBody?.affectedByGravity = false
-        physicsBody?.allowsRotation = true
+        physicsBody?.allowsRotation = false
         physicsBody?.mass = CGFloat(mass)
         physicsBody?.friction = 0.0
         physicsBody?.restitution = 0.01

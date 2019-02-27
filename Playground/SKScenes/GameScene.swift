@@ -21,6 +21,8 @@ class GameScene: SKScene {
     
     var cam: SKCameraNode = SKCameraNode()
     
+    var startPoint: SKNode = SKNode()
+    
     override func didMove(to view: SKView) {
         
         // Camera Setup
@@ -31,51 +33,55 @@ class GameScene: SKScene {
         // Create shape node to use during mouse interaction
         
         
-        var h = self.frame.height
-//        h = UIScreen.main.bounds.height
+        let h = self.frame.height
+        let w = self.frame.width
         steeringWheel = SteeringWheel()
-        steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0.2)))
+        steeringWheel.position = CGPoint(x: (w * 0), y: (-h / 2 + (h * 0.2)))
         steeringWheel.zPosition = 10
         steeringWheel.setScale(1.5)
         self.camera?.addChild(steeringWheel)
         
         steeringIndicator = SteeringIndicator()
-        steeringIndicator.position = CGPoint(x: 0, y: (-h/2 + (h * 0.0)))
+        steeringIndicator.position = CGPoint(x: 0, y: (-h / 2 + (h * 0.0)))
         steeringIndicator.zPosition = 10
         steeringIndicator.setScale(1)
         self.camera?.addChild(steeringIndicator)
         
         
-        let vehicle: Vehicle = Vehicle(imageNamed: "yellow_car")
-        car = vehicle
+        car = Vehicle(imageNamed: "yellow_car")
         car.zPosition = 9
         car.name = "Car"
-        car.setScale(0.1)
         self.addChild(car)
         
+        let resetButton = SKSpriteNode(imageNamed: "button_restart")
+        resetButton.name = "ResetBtn"
+        resetButton.position = CGPoint(x: (w * 0.0), y: (h * 0.45))
+        resetButton.setScale(1.5)
+        self.camera?.addChild(resetButton)
         
-        if let startPoint = self.childNode(withName: "StartPoint") {
-            car.position = startPoint.position
-            
+    
+        
+        if let point = self.childNode(withName: "StartPoint") {
+            startPoint = point
         }
         
         if let label = self.childNode(withName: "SteeringAngleLabel") as? SKLabelNode{
             steeringAngleLabel = label
         }
         
-        if let road = self.childNode(withName: "OuterMap") as? SKSpriteNode{
-            let texture = road.texture!
-            road.physicsBody = SKPhysicsBody(texture: texture, size: road.size)
-            road.physicsBody?.affectedByGravity = false
-            road.physicsBody?.allowsRotation = false
-            road.physicsBody?.isDynamic = false
-        }
+        setup()
+        
     }
     
     // MARK: - Setup
     
+    
+    
     func setup() {
-        
+        car.position = startPoint.position
+        car.zRotation = 0
+        car.velocity = 0
+        car.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     }
     
     
@@ -84,6 +90,9 @@ class GameScene: SKScene {
         let node = atPoint(location)
         if let wheel = node as? SteeringWheel {
             wheel.touchDown(t: t)
+        }
+        if node.name == "ResetBtn" {
+            setup()
         }
     }
     
@@ -107,7 +116,7 @@ class GameScene: SKScene {
         let move = SKAction.move(to: position, duration: delay)
         let rotate = SKAction.rotate(toAngle: rotation, duration: delay, shortestUnitArc: true)
         
-        let adjust = SKAction.group([move, rotate])
+        let adjust = SKAction.group([move])
         cam.run(adjust)
     }
     
@@ -141,10 +150,11 @@ class GameScene: SKScene {
             steeringAngleLabel.text = String(steeringAngle.rounded())
             
             car.turn(by: steeringAngle)
-            car.update(currentTime)
+            
         }
         
         car.accelerate()
+        car.update(currentTime)
         adjustCamera(to: car)
         
         // the last time interval that the frame updated
