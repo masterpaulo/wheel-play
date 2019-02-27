@@ -105,9 +105,9 @@ class GameScene: SKScene {
         let rotation = car.zRotation
         
         let move = SKAction.move(to: position, duration: delay)
-        let rotate = SKAction.rotate(toAngle: rotation, duration: delay)
+        let rotate = SKAction.rotate(toAngle: rotation, duration: delay, shortestUnitArc: true)
         
-        let adjust = SKAction.group([move])
+        let adjust = SKAction.group([move, rotate])
         cam.run(adjust)
     }
     

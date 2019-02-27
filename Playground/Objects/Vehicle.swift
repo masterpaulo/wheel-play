@@ -12,7 +12,7 @@ import SpriteKit
 class Vehicle: SKSpriteNode {
     
     
-    var velocity: CGVector = CGVector(dx: 0, dy: 0)
+    var velocity: CGFloat = 0.0
     var topSpeed: Double = 100
     var mass: Double = 1300.00
     
@@ -45,6 +45,26 @@ class Vehicle: SKSpriteNode {
         }
     }
     
+    var motionSpeed: CGFloat {
+        get {
+            let v = self.physicsBody?.velocity
+            if let vX = v?.dx, let vY = v?.dy {
+                return hypot(vX, vY)
+            }
+            return 0.0
+        }
+    }
+    
+    var motionDirection: CGFloat {
+        get {
+            let v = self.physicsBody?.velocity
+            if let vX = v?.dx, let vY = v?.dy {
+                return atan2(vY, vX)
+            }
+            return 0.0
+        }
+    }
+    
     
     // MARK: init
     
@@ -74,127 +94,57 @@ class Vehicle: SKSpriteNode {
         
         physicsBody = SKPhysicsBody(texture: self.texture!, size: size)
         physicsBody?.affectedByGravity = false
+        physicsBody?.allowsRotation = true
         physicsBody?.mass = CGFloat(mass)
+        physicsBody?.friction = 0.0
+        physicsBody?.restitution = 0.01
     }
     
     
     func turn(by amount: Double){
-        tireAngle = amount / 450
+        tireAngle = amount / 10
         let tireDirection = CGFloat(tireAngle * maxAngle).degreesToRadians()
         let turnAngle = frontDirection + tireDirection
         
-        let speed = CGFloat(topSpeed)
-        let factor: CGFloat = 5 / 60
-        
-        let lx = cos(turnAngle) * speed * factor
-        let ly = sin(turnAngle) * speed * factor
-        
-        let velocity = CGVector(dx: lx, dy: ly)
-//        self.physicsBody?.applyForce(friction)
-        
-//        self.zRotation += CGFloat(tireAngle).degreesToRadians() * 1
-        
+        let speed = motionSpeed.rounded()
+        let factor: CGFloat = speed / 100 / 60 / 45
+
         let rotate = SKAction.rotate(byAngle: CGFloat(tireAngle) * factor, duration: 0)
-        let push = SKAction.move(by: velocity, duration: 0)
-        let action = SKAction.group([rotate, push])
+        
         self.run(rotate)
-//        print(frontDirection, tireAngle, tireDirection, turnAngle)
     }
     
+    // Only go forward towards front Direction
     func accelerate() {
-        
-        let d = frontDirection
-        let posX = cos(d) * CGFloat(topSpeed) * CGFloat(mass)
-        let posY = sin(d) * CGFloat(topSpeed) * CGFloat(mass)
+        let posX = cos(frontDirection) * CGFloat(topSpeed) * CGFloat(mass)
+        let posY = sin(frontDirection) * CGFloat(topSpeed) * CGFloat(mass)
         let direction = CGVector(dx: posX, dy: posY)
         self.physicsBody?.applyForce(direction)
-//        print(self.zRotation, self.frontPoint, self.rearPoint)
-        
-        killLateralVelocity(drift: 0.0)
     }
     
     func killLateralVelocity(drift: Double){
-        var v = self.physicsBody?.velocity
-        
-//        self.physicsBody?.velocity = v ?? CGVector(dx: 0, dy: 0)
-        
-        
-        if let vX = v?.dx, let vY = v?.dy {
-            let velocityAngle = atan2(vY, vX)
-            let len = hypot(vX, vY)
-            let multiplier = 100.0 / len
-//            v?.dx *= multiplier
-//            v?.dy *= multiplier
+        // let multiplier = 100.0 / motionSpeed ?
+        let dAngle = shortestAngleBetween(motionDirection, frontDirection)
+        if motionSpeed > 1 {
+            let frontSpeed = cos(dAngle) * motionSpeed
+            let lateralSpeed = sin(dAngle) * motionSpeed
             
-            let dAngle = shortestAngleBetween(velocityAngle, frontDirection)
-            if len < 1 {
-                
-            }
-            else{
-//                print(len, dAngle.radiansToDegrees(), velocityAngle, frontDirection)
-                let frontSpeed = cos(dAngle) * len
-                let lateralSpeed = sin(dAngle) * len
-                
-                let frontAngle = frontDirection
-                let lateralAngle = zRotation
-                
-                let frontY = sin(frontAngle) * frontSpeed
-                let frontX = cos(frontAngle) * frontSpeed
-                
-                let frontVelocity = CGVector(dx: frontX, dy: frontY)
-                
-                print(frontVelocity, v!, frontSpeed)
-                self.physicsBody?.velocity = frontVelocity
-            }
+            let frontAngle = frontDirection
+            let lateralAngle = zRotation
             
+            let frontY = sin(frontAngle) * frontSpeed
+            let frontX = cos(frontAngle) * frontSpeed
             
+            let lateralY = sin(lateralAngle) * lateralSpeed * CGFloat(drift)
+            let lateralX = cos(lateralAngle) * lateralSpeed * CGFloat(drift)
+            
+            let frontVelocity = CGVector(dx: frontX + lateralX, dy: frontY + lateralY)
+            
+            self.physicsBody?.velocity = frontVelocity
         }
-        
-
-        
-//        if let vX = v?.dx, let vY = v?.dy {
-//            let movingDirection = atan2(vY, vX)
-//            let movingForce = hypot(vX, vY)
-//
-//
-////            print("motion direction \(movingDirection.radiansToDegrees())")
-//
-////            let turnAngle = frontDirection + CGFloat(tireAngle * maxAngle).degreesToRadians()
-//            let turnAngle = frontDirection
-////            print("turn angle \(turnAngle.radiansToDegrees())")
-//
-//            let dAngle = shortestAngleBetween(movingDirection, turnAngle)
-//            print("delta angle \(dAngle.radiansToDegrees()) \(movingForce)")
-//
-//            let y = sin(dAngle) * movingForce // forward velocity
-//            let x = cos(dAngle) * movingForce // lateral velocity
-//            print("xy : \(x), \(y)")
-//
-//            //eliminate x
-//            var lateralAngle: CGFloat = 0.0
-//            if movingDirection > turnAngle {
-//                lateralAngle = turnAngle - CGFloat.pi / 2
-//            }
-//            else {
-//                lateralAngle = turnAngle + CGFloat.pi / 2
-//            }
-//            print("LATERAL A \(lateralAngle)")
-//
-//            let factor: CGFloat = 100.00
-//
-//            let lx = cos(lateralAngle) * x * factor
-//            let ly = sin(lateralAngle) * x * factor
-//
-//            let friction = CGVector(dx: lx, dy: ly)
-////            self.physicsBody?.applyImpulse(friction)
-////            self.physicsBody?.velocity = friction
-//        }
-        
     }
     
     func update(_ currentTime: TimeInterval){
-//        self.zRotation += CGFloat(tireAngle).degreesToRadians()
-//        killLateralVelocity()
-//        self.run(SKAction.move(by: direction, duration: 0.5))
+        killLateralVelocity(drift: 0.0)
     }
 }
