@@ -31,7 +31,8 @@ class GameScene: SKScene {
         // Create shape node to use during mouse interaction
         
         
-        let h = self.frame.height
+        var h = self.frame.height
+//        h = UIScreen.main.bounds.height
         steeringWheel = SteeringWheel()
         steeringWheel.position = CGPoint(x: 0, y: (-h/2 + (h * 0.2)))
         steeringWheel.zPosition = 10
@@ -44,8 +45,18 @@ class GameScene: SKScene {
         steeringIndicator.setScale(1)
         self.camera?.addChild(steeringIndicator)
         
-        if let vehicle = self.childNode(withName: "Car") as? Vehicle {
-            car = vehicle
+        
+        let vehicle: Vehicle = Vehicle(imageNamed: "yellow_car")
+        car = vehicle
+        car.zPosition = 9
+        car.name = "Car"
+        car.setScale(0.1)
+        self.addChild(car)
+        
+        
+        if let startPoint = self.childNode(withName: "StartPoint") {
+            car.position = startPoint.position
+            
         }
         
         if let label = self.childNode(withName: "SteeringAngleLabel") as? SKLabelNode{
@@ -59,6 +70,12 @@ class GameScene: SKScene {
             road.physicsBody?.allowsRotation = false
             road.physicsBody?.isDynamic = false
         }
+    }
+    
+    // MARK: - Setup
+    
+    func setup() {
+        
     }
     
     
@@ -127,6 +144,7 @@ class GameScene: SKScene {
             car.update(currentTime)
         }
         
+        car.accelerate()
         adjustCamera(to: car)
         
         // the last time interval that the frame updated
