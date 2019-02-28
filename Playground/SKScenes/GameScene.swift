@@ -30,6 +30,9 @@ class GameScene: SKScene {
     var maxAspectRatio: CGFloat = 0.0
     var playableArea: CGRect = CGRect()
     
+    var swipeUpRec: UISwipeGestureRecognizer = UISwipeGestureRecognizer()
+    var swipeDownRec: UISwipeGestureRecognizer = UISwipeGestureRecognizer()
+    
     override func didMove(to view: SKView) {
         
         drawPlayableArea()
@@ -70,7 +73,7 @@ class GameScene: SKScene {
         menuWindow.position = CGPoint(x: 0, y: 0)
         self.camera?.addChild(menuWindow)
         
-    
+        
         
         if let point = self.childNode(withName: "StartPoint") {
             startPoint = point
@@ -80,6 +83,14 @@ class GameScene: SKScene {
             steeringAngleLabel = label
         }
         
+        swipeUpRec.addTarget(self, action: #selector(GameScene.swiped))
+        swipeUpRec.direction = .up
+        
+        swipeDownRec.addTarget(self, action: #selector(GameScene.swiped))
+        swipeDownRec.direction = .down
+        
+        self.view?.addGestureRecognizer(swipeUpRec)
+        self.view?.addGestureRecognizer(swipeDownRec)
         setup()
         
     }
@@ -112,7 +123,7 @@ class GameScene: SKScene {
         shape.strokeColor = SKColor.red
         shape.lineWidth = 8
         marginLine = shape
-        cam.addChild(shape)
+//        cam.addChild(shape)
     }
     
     func setup() {
@@ -123,7 +134,7 @@ class GameScene: SKScene {
     }
     
     func pause() {
-        // We don't PAUSE in this game \(^ ^)/
+        // We don't do PAUSE in this game \(^ ^)/
         //self.view?.isPaused = !(self.view?.isPaused)!
         //self.scene?.isPaused = !isPaused
     }
@@ -132,26 +143,31 @@ class GameScene: SKScene {
     
     func touchDown(t : UITouch) {
         let location = t.location(in:self)
+        let touchLocationCamera = t.location(in: self.cam)
         let node = atPoint(location)
-        print(node)
+        var shouldSwipe = false
         
         if node.name == "PauseButton" {
             menuWindow.showMenu()
-            return
         }
-        if node.name == "OkButton" {
+        else if node.name == "OkButton" {
             menuWindow.hideMenu()
-            return
         }
-        if node.name == "ResetButton" {
+        else if node.name == "ResetButton" {
             setup()
             menuWindow.hideMenu()
-            return
         }
-        if let wheel = node as? SteeringWheel {
+        else if let wheel = node as? SteeringWheel {
             wheel.touchDown(t: t)
         }
-        
+        else if touchLocationCamera.y > 0 {
+            shouldSwipe = true
+        }
+        else {
+            shouldSwipe = false
+        }
+        swipeUpRec.isEnabled = shouldSwipe
+        swipeDownRec.isEnabled = shouldSwipe
     }
     
     func touchMoved(t : UITouch) {
@@ -164,24 +180,46 @@ class GameScene: SKScene {
         if steeringWheel.state == .hold {
             steeringWheel.touchUp(t: t)
         }
+        swipeUpRec.isEnabled = true
+        swipeDownRec.isEnabled = true
+        
     }
     
     func adjustCamera(to node: SKNode){
         let delay = 0.5
         let position = node.position
         let rotation = car.zRotation
+        var actions = [SKAction]()
+        let followRotation = false
         
         let move = SKAction.move(to: position, duration: delay)
-        //let rotate = SKAction.rotate(toAngle: rotation, duration: delay, shortestUnitArc: true)
+        actions.append(move)
+        if followRotation {
+            let rotate = SKAction.rotate(toAngle: rotation, duration: delay, shortestUnitArc: true)
+            actions.append(rotate)
+        }
         
-        let adjust = SKAction.group([move])
+        
+        let adjust = SKAction.group(actions)
         cam.run(adjust)
     }
     
     
-    func swipedRight() {
-        
+    @objc func swiped(_ sender: UISwipeGestureRecognizer) {
+        switch sender.direction {
+            case .up:
+                print("up shift")
+                car.shift(to: .first)
+                break;
+            case .down:
+                print("down shift")
+                car.shift(to: .reverse)
+                break;
+            default:
+                return // do nothing
+        }
     }
+    
    
     // MARK: Overrides
     

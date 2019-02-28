@@ -14,10 +14,48 @@ class Vehicle: SKSpriteNode {
     
     var velocity: CGFloat = 0.0
     var topSpeed: Double = 100
+    var acceleration: Double = 0
     var mass: Double = 1300.00
     
     private var tireAngle: Double = 0.0
     private var maxAngle: Double = 45.00
+    
+    
+    enum Gear : Int{
+        case reverse = -1
+        case neutral = 0
+        case first = 1
+        case second = 2
+        case third = 3
+        case fourth = 4
+        case fifth = 5
+        
+        var display: String {
+            switch self {
+                case .reverse: return "R"
+                case .neutral: return "N"
+                case .first: return "1"
+                case .second: return "2"
+                case .third: return "3"
+                case .fourth: return "4"
+                case .fifth: return "5"
+            }
+        }
+        
+        func acceleration() -> Double {
+            switch self {
+                case .reverse: return -30
+                case .neutral: return 0
+                case .first: return 30
+                case .second: return 50
+                case .third: return 70
+                case .fourth: return 90
+                case .fifth: return 100
+            }
+        }
+    }
+    
+    var currentGear: Gear = .neutral
     
     var frontDirection: CGFloat {
         get {
@@ -66,7 +104,7 @@ class Vehicle: SKSpriteNode {
     }
     
     
-    // MARK: init
+    // MARK: - Init
     
     override init(texture: SKTexture!, color: SKColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -82,12 +120,9 @@ class Vehicle: SKSpriteNode {
         self.init(texture: texture, color: UIColor.clear, size: texture.size())
         
         setup()
-        
-//        self.anchorPoint = CGPoint(x: 0, y: 0)
-        
     }
     
-    // MARK: setup
+    // MARK: - Setup
     
     func setup() {
         self.name = "Vehicle"
@@ -100,6 +135,7 @@ class Vehicle: SKSpriteNode {
         physicsBody?.restitution = 0.01
     }
     
+    // MARK: - Object Actions
     
     func turn(by amount: Double){
         tireAngle = amount / 10
@@ -116,11 +152,23 @@ class Vehicle: SKSpriteNode {
     
     // Only go forward towards front Direction
     func accelerate() {
-        let posX = cos(frontDirection) * CGFloat(topSpeed) * CGFloat(mass)
-        let posY = sin(frontDirection) * CGFloat(topSpeed) * CGFloat(mass)
+        let posX = cos(frontDirection) * CGFloat(acceleration) * CGFloat(mass)
+        let posY = sin(frontDirection) * CGFloat(acceleration) * CGFloat(mass)
         let direction = CGVector(dx: posX, dy: posY)
+        
+        print("accelration force :: \(direction) ||||| speed \(motionSpeed)")
+        
         self.physicsBody?.applyForce(direction)
     }
+    
+    func shift(to gear: Gear){
+        currentGear = gear
+        acceleration = gear.acceleration()
+        
+    }
+    
+    
+    // MARK: - Supporting Physics
     
     func killLateralVelocity(drift: Double){
         // let multiplier = 100.0 / motionSpeed ?
@@ -143,6 +191,8 @@ class Vehicle: SKSpriteNode {
             self.physicsBody?.velocity = frontVelocity
         }
     }
+    
+    // MARK: - Update
     
     func update(_ currentTime: TimeInterval){
         killLateralVelocity(drift: 0.0)
