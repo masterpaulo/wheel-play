@@ -19,6 +19,8 @@ class GameScene: SKScene {
     var steeringIndicator: SteeringIndicator = SteeringIndicator()
     var steeringAngleLabel: SKLabelNode = SKLabelNode()
     
+    var gearLabel: SKLabelNode = SKLabelNode() // replace with dashboard
+    
     var cam: SKCameraNode = SKCameraNode()
     var marginLine: SKShapeNode = SKShapeNode()
     
@@ -39,7 +41,6 @@ class GameScene: SKScene {
         
         // Camera Setup
         cam = SKCameraNode()
-        cam.addChild(marginLine)
         self.camera = cam
         self.addChild(cam)
         
@@ -68,6 +69,14 @@ class GameScene: SKScene {
         pauseButton.position = CGPoint(x: (w * 0.0), y: (h * 0.45))
         pauseButton.setScale(3)
         self.camera?.addChild(pauseButton)
+        
+        gearLabel = SKLabelNode(fontNamed: "Futura")
+        gearLabel.position = CGPoint(x: w * 0.5 - 50, y: h * 0.5 - 100)
+        gearLabel.fontSize = 100
+        gearLabel.fontColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+    
+        gearLabel.text = "N"
+        self.camera?.addChild(gearLabel)
         
         menuWindow = GameMenu(size: playableArea.size)
         menuWindow.position = CGPoint(x: 0, y: 0)
@@ -123,13 +132,13 @@ class GameScene: SKScene {
         shape.strokeColor = SKColor.red
         shape.lineWidth = 8
         marginLine = shape
-//        cam.addChild(shape)
     }
     
     func setup() {
         car.position = startPoint.position
         car.zRotation = 0
         car.velocity = 0
+        car.shift(to: .neutral)
         car.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     }
     
@@ -160,7 +169,7 @@ class GameScene: SKScene {
         else if let wheel = node as? SteeringWheel {
             wheel.touchDown(t: t)
         }
-        else if touchLocationCamera.y > 0 {
+        else if touchLocationCamera.y > -100 {
             shouldSwipe = true
         }
         else {
@@ -190,7 +199,7 @@ class GameScene: SKScene {
         let position = node.position
         let rotation = car.zRotation
         var actions = [SKAction]()
-        let followRotation = false
+        let followRotation = true
         
         let move = SKAction.move(to: position, duration: delay)
         actions.append(move)
@@ -209,15 +218,21 @@ class GameScene: SKScene {
         switch sender.direction {
             case .up:
                 print("up shift")
-                car.shift(to: .first)
+                if let gear = car.currentGear.nextUp() {
+                    car.shift(to: gear)
+                }
                 break;
             case .down:
                 print("down shift")
-                car.shift(to: .reverse)
+                if let gear = car.currentGear.nextDown() {
+                    car.shift(to: gear)
+                }
                 break;
             default:
                 return // do nothing
         }
+        gearLabel.text = car.currentGear.display
+        
     }
     
    

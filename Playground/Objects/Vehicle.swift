@@ -53,6 +53,30 @@ class Vehicle: SKSpriteNode {
                 case .fifth: return 100
             }
         }
+        
+        func nextUp() -> Gear? {
+            switch self {
+                case .reverse: return .neutral
+                case .neutral: return .first
+                case .first: return .second
+                case .second: return .third
+                case .third: return .fourth
+                case .fourth: return .fifth
+                case .fifth: return nil
+            }
+        }
+        
+        func nextDown() -> Gear? {
+            switch self {
+                case .reverse: return nil
+                case .neutral: return .reverse
+                case .first: return .neutral
+                case .second: return .first
+                case .third: return .second
+                case .fourth: return .third
+                case .fifth: return .fourth
+            }
+        }
     }
     
     var currentGear: Gear = .neutral
@@ -143,7 +167,8 @@ class Vehicle: SKSpriteNode {
         //let turnAngle = frontDirection + tireDirection
         
         let speed = motionSpeed.rounded()
-        let factor: CGFloat = speed / 100 / 60 / 45
+        var factor: CGFloat = speed / 100 / 60 / 45
+        factor *= currentGear == .reverse ? -1 : 1;
 
         let rotate = SKAction.rotate(byAngle: CGFloat(tireAngle) * factor, duration: 0)
         
@@ -154,9 +179,10 @@ class Vehicle: SKSpriteNode {
     func accelerate() {
         let posX = cos(frontDirection) * CGFloat(acceleration) * CGFloat(mass)
         let posY = sin(frontDirection) * CGFloat(acceleration) * CGFloat(mass)
+        
         let direction = CGVector(dx: posX, dy: posY)
         
-        print("accelration force :: \(direction) ||||| speed \(motionSpeed)")
+//        print("accelration force :: \(direction) ||||| speed \(motionSpeed)")
         
         self.physicsBody?.applyForce(direction)
     }
@@ -164,12 +190,21 @@ class Vehicle: SKSpriteNode {
     func shift(to gear: Gear){
         currentGear = gear
         acceleration = gear.acceleration()
-        
     }
+    
+    
     
     
     // MARK: - Supporting Physics
     
+    /**
+     Kill Lateral Velocity of moving body
+     
+     - parameters:
+        - drift: Defines the amount of drift. A Double value from 0.0 to 1.0.
+     
+     The `drift` value defines how much lateral velocity would be retained on the moving body
+    */
     func killLateralVelocity(drift: Double){
         // let multiplier = 100.0 / motionSpeed ?
         let dAngle = shortestAngleBetween(motionDirection, frontDirection)
@@ -192,9 +227,19 @@ class Vehicle: SKSpriteNode {
         }
     }
     
+    func limitMotionSpeed() {
+        let dAngle = shortestAngleBetween(motionDirection, frontDirection)
+        if motionSpeed > 1 {
+            let frontSpeed = cos(dAngle) * motionSpeed
+            if frontSpeed > CGFloat(topSpeed) {
+                print("limit motion speed")
+            }
+        }
+    }
+    
     // MARK: - Update
     
     func update(_ currentTime: TimeInterval){
-        killLateralVelocity(drift: 0.0)
+        killLateralVelocity(drift: 0.2)
     }
 }
