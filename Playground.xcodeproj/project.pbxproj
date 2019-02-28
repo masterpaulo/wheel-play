@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2135190C2227B92200694D6E /* GameMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2135190B2227B92200694D6E /* GameMenu.swift */; };
 		21719D1F221FE34F00070775 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21719D1E221FE34F00070775 /* MainMenuScene.sks */; };
 		21719D21221FE37700070775 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21719D20221FE37700070775 /* MainMenuScene.swift */; };
 		21719D23221FFDB800070775 /* SteeringIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21719D22221FFDB800070775 /* SteeringIndicator.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2135190B2227B92200694D6E /* GameMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenu.swift; sourceTree = "<group>"; };
 		21719D1E221FE34F00070775 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
 		21719D20221FE37700070775 /* MainMenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		21719D22221FFDB800070775 /* SteeringIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteeringIndicator.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				21F9562E221E59B100E784C6 /* SteeringWheel.swift */,
 				21F95635221E8ACF00E784C6 /* Vehicle.swift */,
 				21719D22221FFDB800070775 /* SteeringIndicator.swift */,
+				2135190B2227B92200694D6E /* GameMenu.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				21F95636221E8ACF00E784C6 /* Vehicle.swift in Sources */,
 				21A8809E221A973D00CFD400 /* GameScene.swift in Sources */,
 				21A880A0221A973D00CFD400 /* GameViewController.swift in Sources */,
+				2135190C2227B92200694D6E /* GameMenu.swift in Sources */,
 				21F9562A221E570500E784C6 /* CGFloat+Extensions.swift in Sources */,
 				21A88098221A973D00CFD400 /* AppDelegate.swift in Sources */,
 				21719D21221FE37700070775 /* MainMenuScene.swift in Sources */,

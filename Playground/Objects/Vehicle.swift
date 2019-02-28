@@ -103,8 +103,8 @@ class Vehicle: SKSpriteNode {
     
     func turn(by amount: Double){
         tireAngle = amount / 10
-        let tireDirection = CGFloat(tireAngle * maxAngle).degreesToRadians()
-        let turnAngle = frontDirection + tireDirection
+        //let tireDirection = CGFloat(tireAngle * maxAngle).degreesToRadians()
+        //let turnAngle = frontDirection + tireDirection
         
         let speed = motionSpeed.rounded()
         let factor: CGFloat = speed / 100 / 60 / 45

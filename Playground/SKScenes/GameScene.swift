@@ -20,21 +20,28 @@ class GameScene: SKScene {
     var steeringAngleLabel: SKLabelNode = SKLabelNode()
     
     var cam: SKCameraNode = SKCameraNode()
+    var marginLine: SKShapeNode = SKShapeNode()
     
+    var menuWindow: GameMenu = GameMenu()
     var startPoint: SKNode = SKNode()
+    
+    let deviceWidth = UIScreen.main.bounds.width
+    let deviceHeight = UIScreen.main.bounds.height
+    var maxAspectRatio: CGFloat = 0.0
+    var playableArea: CGRect = CGRect()
     
     override func didMove(to view: SKView) {
         
+        drawPlayableArea()
+        
         // Camera Setup
         cam = SKCameraNode()
+        cam.addChild(marginLine)
         self.camera = cam
         self.addChild(cam)
         
-        // Create shape node to use during mouse interaction
-        
-        
-        let h = self.frame.height
-        let w = self.frame.width
+        let h = playableArea.height
+        let w = playableArea.width
         steeringWheel = SteeringWheel()
         steeringWheel.position = CGPoint(x: (w * 0), y: (-h / 2 + (h * 0.2)))
         steeringWheel.zPosition = 10
@@ -53,11 +60,15 @@ class GameScene: SKScene {
         car.name = "Car"
         self.addChild(car)
         
-        let resetButton = SKSpriteNode(imageNamed: "button_restart")
-        resetButton.name = "ResetBtn"
-        resetButton.position = CGPoint(x: (w * 0.0), y: (h * 0.45))
-        resetButton.setScale(1.5)
-        self.camera?.addChild(resetButton)
+        let pauseButton = SKSpriteNode(imageNamed: "button_pause")
+        pauseButton.name = "PauseButton"
+        pauseButton.position = CGPoint(x: (w * 0.0), y: (h * 0.45))
+        pauseButton.setScale(3)
+        self.camera?.addChild(pauseButton)
+        
+        menuWindow = GameMenu(size: playableArea.size)
+        menuWindow.position = CGPoint(x: 0, y: 0)
+        self.camera?.addChild(menuWindow)
         
     
         
@@ -73,9 +84,36 @@ class GameScene: SKScene {
         
     }
     
+    
+    
     // MARK: - Setup
     
-    
+    func drawPlayableArea() {
+        let shape = SKShapeNode()
+        let path = CGMutablePath()
+        
+        maxAspectRatio = deviceHeight / deviceWidth
+        
+        let size = CGSize(width: 768, height: 1024)
+        
+        //USE THIS CODE IF YOUR APP IS IN PORTRAIT MODE
+        let playableWidth = size.height / maxAspectRatio
+        let playableMargin = (size.width - playableWidth) / 2.0
+        playableArea = CGRect(x: playableMargin, y: 0, width: playableWidth, height: size.height)
+
+        //USE THIS CODE IF YOUR APP IS IN LANDSCAPE MODE
+        //let playableHeight = size.width / maxAspectRatio
+        //let playableMargin = (size.height - playableHeight) / 2.0
+        //playableArea = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
+        
+        
+        path.addRect(playableArea)
+        shape.path = path
+        shape.strokeColor = SKColor.red
+        shape.lineWidth = 8
+        marginLine = shape
+        cam.addChild(shape)
+    }
     
     func setup() {
         car.position = startPoint.position
@@ -84,16 +122,36 @@ class GameScene: SKScene {
         car.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     }
     
+    func pause() {
+        // We don't PAUSE in this game \(^ ^)/
+        //self.view?.isPaused = !(self.view?.isPaused)!
+        //self.scene?.isPaused = !isPaused
+    }
+    
+    // MARK: - User Actions
     
     func touchDown(t : UITouch) {
         let location = t.location(in:self)
         let node = atPoint(location)
+        print(node)
+        
+        if node.name == "PauseButton" {
+            menuWindow.showMenu()
+            return
+        }
+        if node.name == "OkButton" {
+            menuWindow.hideMenu()
+            return
+        }
+        if node.name == "ResetButton" {
+            setup()
+            menuWindow.hideMenu()
+            return
+        }
         if let wheel = node as? SteeringWheel {
             wheel.touchDown(t: t)
         }
-        if node.name == "ResetBtn" {
-            setup()
-        }
+        
     }
     
     func touchMoved(t : UITouch) {
@@ -114,12 +172,16 @@ class GameScene: SKScene {
         let rotation = car.zRotation
         
         let move = SKAction.move(to: position, duration: delay)
-        let rotate = SKAction.rotate(toAngle: rotation, duration: delay, shortestUnitArc: true)
+        //let rotate = SKAction.rotate(toAngle: rotation, duration: delay, shortestUnitArc: true)
         
         let adjust = SKAction.group([move])
         cam.run(adjust)
     }
     
+    
+    func swipedRight() {
+        
+    }
    
     // MARK: Overrides
     
@@ -156,9 +218,6 @@ class GameScene: SKScene {
         car.accelerate()
         car.update(currentTime)
         adjustCamera(to: car)
-        
-        // the last time interval that the frame updated
-        //lastTime = currentTime
     }
     
     
